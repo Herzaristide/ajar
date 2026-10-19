@@ -44,15 +44,17 @@ pub fn build(config: &Config) -> Page {
 fn typewriter(view: &gtk::TextView, scrolled: &gtk::ScrolledWindow) {
     let adj = scrolled.vadjustment();
 
-    // Une demi-page de marge en haut et en bas : la première comme la dernière
-    // ligne peuvent venir au centre.
+    // Une demi-page de marge en haut : la première ligne peut venir au centre.
+    // Une page entière en bas : quand une ligne s'ajoute, la nouvelle position
+    // tient encore dans la zone de défilement avant même que GTK l'agrandisse,
+    // sinon le mouvement serait coupé en deux.
     adj.connect_page_size_notify(glib::clone!(
         #[weak] view,
         move |adj| {
             let half = (adj.page_size() / 2.0) as i32;
             if view.top_margin() != half {
                 view.set_top_margin(half);
-                view.set_bottom_margin(half);
+                view.set_bottom_margin(half * 2);
             }
         }
     ));
@@ -111,8 +113,11 @@ fn center_cursor(view: &gtk::TextView, scrolled: &gtk::ScrolledWindow, animation
         return;
     }
 
-    animation.reset();
+    eprintln!("target={:.0} max={:.0} value={:.0} chars={}", target, adj.upper() - adj.page_size(), adj.value(), buffer.char_count());
+    // Départ et arrivée d'abord : `reset()` réapplique la valeur de départ, et
+    // l'ancienne ferait sauter la page avant l'animation.
     animation.set_value_from(adj.value());
     animation.set_value_to(target);
+    animation.reset();
     animation.play();
 }

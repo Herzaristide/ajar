@@ -1,22 +1,22 @@
 # Module Home Manager. Dans /etc/nixos :
-#   inputs.scriptorium.url = "path:/home/aristide/ciph3r/scriptorium";
-#   imports = [ inputs.scriptorium.homeManagerModules.default ];
-#   programs.scriptorium.enable = true;
+#   inputs.ajar.url = "path:/home/aristide/ciph3r/ajar";
+#   imports = [ inputs.ajar.homeManagerModules.default ];
+#   programs.ajar.enable = true;
 self:
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.programs.scriptorium;
+  cfg = config.programs.ajar;
   toml = pkgs.formats.toml { };
 in
 {
-  options.programs.scriptorium = {
-    enable = lib.mkEnableOption "Scriptorium, l'espace d'écriture zen";
+  options.programs.ajar = {
+    enable = lib.mkEnableOption "Ajar, l'espace d'écriture zen";
 
     package = lib.mkOption {
       type = lib.types.package;
       default = self.packages.${pkgs.stdenv.hostPlatform.system}.default;
-      description = "Le paquet Scriptorium.";
+      description = "Le paquet Ajar.";
     };
 
     fonts = lib.mkOption {
@@ -36,15 +36,15 @@ in
         typographie = true;
         plein_ecran = true;
       };
-      description = "Écrit dans ~/.config/scriptorium/config.toml.";
+      description = "Écrit dans ~/.config/ajar/config.toml.";
     };
   };
 
   config = lib.mkIf cfg.enable {
     home.packages = [ cfg.package ] ++ cfg.fonts;
     fonts.fontconfig.enable = lib.mkIf (cfg.fonts != [ ]) (lib.mkDefault true);
-    xdg.configFile."scriptorium/config.toml" = lib.mkIf (cfg.settings != { }) {
-      source = toml.generate "scriptorium-config.toml" cfg.settings;
+    xdg.configFile."ajar/config.toml" = lib.mkIf (cfg.settings != { }) {
+      source = toml.generate "ajar-config.toml" cfg.settings;
     };
   };
 }

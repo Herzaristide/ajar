@@ -1,5 +1,5 @@
 {
-  description = "Scriptorium — un espace d'écriture zen pour la littérature";
+  description = "Ajar — un espace d'écriture zen pour la littérature";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";

@@ -21,7 +21,7 @@ let
   cargoArtifacts = craneLib.buildDepsOnly common;
 
   # La configuration fontconfig du système, plus les polices du texte.
-  fontsConf = writeText "scriptorium-fonts.conf" ''
+  fontsConf = writeText "ajar-fonts.conf" ''
     <?xml version="1.0"?>
     <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
     <fontconfig>
@@ -41,21 +41,21 @@ craneLib.buildPackage (common // {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "scriptorium";
-      desktopName = "Scriptorium";
+      name = "ajar";
+      desktopName = "Ajar";
       genericName = "Écriture";
       comment = "Un espace d'écriture zen pour la littérature";
-      exec = "scriptorium %f";
+      exec = "ajar %f";
       icon = "accessories-text-editor";
       categories = [ "Office" "TextEditor" ];
-      startupWMClass = "scriptorium";
+      startupWMClass = "ajar";
     })
   ];
 
   meta = {
     description = "Un espace d'écriture zen pour la littérature";
     license = lib.licenses.gpl3Plus;
-    mainProgram = "scriptorium";
+    mainProgram = "ajar";
     platforms = lib.platforms.linux;
   };
 })

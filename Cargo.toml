@@ -1,5 +1,5 @@
 [package]
-name = "scriptorium"
+name = "ajar"
 version = "0.1.0"
 edition = "2021"
 description = "Un espace d'écriture zen pour la littérature"
@@ -12,6 +12,7 @@ gtk = { package = "gtk4", version = "0.11", features = ["v4_16"] }
 serde = { version = "1", features = ["derive"] }
 toml = "1"
 anyhow = "1"
+gix = { version = "0.89", default-features = false, features = ["sha1"] }
 
 [profile.release]
 lto = "thin"
