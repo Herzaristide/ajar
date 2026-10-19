@@ -94,7 +94,9 @@ fn typewriter(view: &gtk::TextView, scrolled: &gtk::ScrolledWindow) {
 }
 
 fn center_cursor(view: &gtk::TextView, scrolled: &gtk::ScrolledWindow, animation: &adw::TimedAnimation) {
-    let Some(content) = scrolled.child() else { return };
+    // Le contenu complet (la colonne), et non le viewport qui n'en montre qu'une partie :
+    // la position obtenue ne dépend pas du défilement en cours.
+    let Some(content) = scrolled.child().and_then(|viewport| viewport.first_child()) else { return };
     let buffer = view.buffer();
     let rect = view.iter_location(&buffer.iter_at_mark(&buffer.get_insert()));
     let (_, y) = view.buffer_to_window_coords(gtk::TextWindowType::Widget, 0, rect.y());
